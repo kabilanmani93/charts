@@ -56,7 +56,7 @@ spec:
         args: ["-c","chmod -R 777 docker-entrypoint-initdb.d/"]
         volumeMounts: 
           - name: scriptpath
-            mountPath: docker-entrypoint-initdb.d/
+            mountPath: /docker-entrypoint-initdb.d
       - name: "remove-lost-found"
         image: "{{ .Values.busybox.image}}:{{ .Values.busybox.tag }}"
         imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
@@ -243,7 +243,8 @@ spec:
       volumes:
       - name: scriptpath
         hostPath: 
-          path: /docker-entrypoint-initdb.d/         
+          path: /docker-entrypoint-initdb.d
+          type: Directory       
       {{- if .Values.configurationFiles }}
       - name: configurations
         configMap:
