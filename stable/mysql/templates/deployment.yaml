@@ -179,10 +179,8 @@ spec:
         {{- end -}}
         {{- end }}
         {{- if .Values.initializationFiles }}
-        {{- range $key, $val := .Values.initializationFiles }}
         - name: migrations
-          mountPath: {{ $.Values.initializationFilesPath }}{{ $key }}
-          subPath: {{ $key }}
+          mountPath: {{ $.Values.initializationFilesPath }}        
         {{- end -}}
         {{- end }}
         {{- if .Values.ssl.enabled }}
