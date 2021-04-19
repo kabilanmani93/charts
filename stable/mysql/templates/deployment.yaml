@@ -165,7 +165,7 @@ spec:
           timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
           successThreshold: {{ .Values.readinessProbe.successThreshold }}
           failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
-        volumeMounts :       
+        volumeMounts:
         - name: data
           mountPath: /var/lib/mysql
           {{- if .Values.persistence.subPath }}
@@ -231,6 +231,7 @@ spec:
         resources:
 {{ toYaml .Values.metrics.resources | indent 10 }}
       {{- end }}
+      volumes:
       {{- if .Values.configurationFiles }}
       - name: configurations
         configMap:
@@ -244,8 +245,8 @@ spec:
       {{- if .Values.ssl.enabled }}
       - name: certificates
         secret:
-          secretName: {{ .Values.ssl.secret }} 
-      {{- end }} 
+          secretName: {{ .Values.ssl.secret }}
+      {{- end }}
       - name: data
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:
