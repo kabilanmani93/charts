@@ -50,13 +50,6 @@ spec:
       {{- end }}
       serviceAccountName: {{ template "mysql.serviceAccountName" . }}
       initContainers:
-      - name: "script-permisssion"
-        image: busybox:latest
-        command: ["/bin/sh"]
-        args: ["-c","chmod -R 777 docker-entrypoint-initdb.d/"]
-        volumeMounts: 
-          - name: scriptpath
-            mountPath: /docker-entrypoint-initdb.d
       - name: "remove-lost-found"
         image: "{{ .Values.busybox.image}}:{{ .Values.busybox.tag }}"
         imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
@@ -172,9 +165,7 @@ spec:
           timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
           successThreshold: {{ .Values.readinessProbe.successThreshold }}
           failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
-        volumeMounts :
-        - name: scriptpath
-          mountPath: /docker-entrypoint-initdb.d        
+        volumeMounts :       
         - name: data
           mountPath: /var/lib/mysql
           {{- if .Values.persistence.subPath }}
@@ -240,11 +231,6 @@ spec:
         resources:
 {{ toYaml .Values.metrics.resources | indent 10 }}
       {{- end }}
-      volumes:
-      - name: scriptpath
-        hostPath: 
-          path: /docker-entrypoint-initdb.d
-          type: Directory       
       {{- if .Values.configurationFiles }}
       - name: configurations
         configMap:
