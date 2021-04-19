@@ -181,7 +181,6 @@ spec:
         {{- if .Values.initializationFiles }}
         - name: migrations
           mountPath: {{ $.Values.initializationFilesPath }}        
-        {{- end -}}
         {{- end }}
         {{- if .Values.ssl.enabled }}
         - name: certificates
