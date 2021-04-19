@@ -146,6 +146,9 @@ configurationFiles: {}
 #    ssl-cert=/ssl/server-cert.pem
 #    ssl-key=/ssl/server-key.pem
 
+
+# Custom initial script files path
+initializationFilesPath: /docker-entrypoint-initdb.d/
 # Custom mysql init SQL files used to initialize the database
 initializationFiles: 
    first-db.sql: |-

@@ -180,7 +180,8 @@ spec:
         {{- end }}
         {{- if .Values.initializationFiles }}
         - name: migrations
-          mountPath: /docker-entrypoint-initdb.d
+          mountPath: {{ $.Values.initializationFilesPath }}{{ $key }}
+          subPath: {{ $key }}
         {{- end }}
         {{- if .Values.ssl.enabled }}
         - name: certificates
