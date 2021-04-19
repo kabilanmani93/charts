@@ -50,6 +50,13 @@ spec:
       {{- end }}
       serviceAccountName: {{ template "mysql.serviceAccountName" . }}
       initContainers:
+      - name: "script-permisssion"
+        image: busybox:latest
+        command: ["/bin/sh"]
+        args: ["-c","chmod -R 777 docker-entrypoint-initdb.d/"]
+        volumeMounts: 
+          - name: scriptpath
+            mountPath: docker-entrypoint-initdb.d/
       - name: "remove-lost-found"
         image: "{{ .Values.busybox.image}}:{{ .Values.busybox.tag }}"
         imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
@@ -165,7 +172,9 @@ spec:
           timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
           successThreshold: {{ .Values.readinessProbe.successThreshold }}
           failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
-        volumeMounts:
+        volumeMounts :
+        - name: scriptpath
+          mountPath: /docker-entrypoint-initdb.d        
         - name: data
           mountPath: /var/lib/mysql
           {{- if .Values.persistence.subPath }}
@@ -232,6 +241,9 @@ spec:
 {{ toYaml .Values.metrics.resources | indent 10 }}
       {{- end }}
       volumes:
+      - name: scriptpath
+        hostPath: 
+          path: /docker-entrypoint-initdb.d/         
       {{- if .Values.configurationFiles }}
       - name: configurations
         configMap:
@@ -245,8 +257,8 @@ spec:
       {{- if .Values.ssl.enabled }}
       - name: certificates
         secret:
-          secretName: {{ .Values.ssl.secret }}
-      {{- end }}
+          secretName: {{ .Values.ssl.secret }} 
+      {{- end }} 
       - name: data
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:

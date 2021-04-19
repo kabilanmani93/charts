@@ -1,8 +1,8 @@
 ## mysql image version
 ## ref: https://hub.docker.com/r/library/mysql/tags/
 ##
-image: "mysql"
-imageTag: "5.7.30"
+image: "kabilanmani/mysql"
+imageTag: "1.0"
 
 strategy:
   type: Recreate
